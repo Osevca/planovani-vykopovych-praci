@@ -1,23 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import Zamestnanci from "./components/Zamestnanci";
+import Ukol from "./components/Ukol";
 
 function App() {
+  const [people, setPeople] = useState([]);
+  const [activeTab, setActiveTab] = useState("zamestnanci"); // Přidáme stav pro aktivní záložku
+
+  const addPerson = (person) => {
+    setPeople([...people, person]);
+  };
+
+  const removePerson = (index) => {
+    const updatedPeople = [...people];
+    updatedPeople.splice(index, 1);
+    setPeople(updatedPeople);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Plánování výkopových prací</h1>
+      <div className="tab-buttons">
+        {" "}
+        {/* Tlačítka pro přepínání mezi záložkami */}
+        <button onClick={() => setActiveTab("zamestnanci")}>Zaměstnanci</button>
+        <button onClick={() => setActiveTab("ukol")}>Úkol</button>
+      </div>
+      {activeTab === "zamestnanci" && ( // Podmínka pro zobrazení obsahu záložky "Zaměstnanci"
+        <Zamestnanci
+          people={people}
+          addPerson={addPerson}
+          removePerson={removePerson}
+        />
+      )}
+      {activeTab === "ukol" && ( // Podmínka pro zobrazení obsahu záložky "Úkol"
+        <Ukol people={people} />
+      )}
     </div>
   );
 }
